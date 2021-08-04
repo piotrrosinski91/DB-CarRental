@@ -10,7 +10,7 @@ public class JdbcConfig {
     private static final String user = "root";
     private static final String password = "";
 
-    public static Connection CONFIG = null;
+    private static Connection CONFIG = null;
 
     private JdbcConfig(){}
 
