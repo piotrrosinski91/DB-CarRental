@@ -61,7 +61,9 @@ public class Cars {
 
         Scanner scanner = new Scanner(System.in);
 
-        PreparedStatement preparedStatement = JdbcConfig.getConnection().prepareStatement("INSERT into auta(marka, model, rocznik, pojemnosc, rodzaj_paliwa, ilosc_drzwi, nr_rej, cena) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement preparedStatement = JdbcConfig.getConnection().prepareStatement(
+                "INSERT into auta(marka, model, rocznik, pojemnosc, rodzaj_paliwa, ilosc_drzwi, nr_rej, cena) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+
         System.out.println("Adding new Car...");
         System.out.println("Type mark");
         preparedStatement.setString(1, scanner.nextLine());
@@ -97,11 +99,44 @@ public class Cars {
                 scanner.nextLine();
                 break;
             } catch (InputMismatchException e) {
-                System.out.println("incorrect value - must be number");
+                System.out.println("Incorrect value - must be number");
                 scanner.next();
             }
         }
         preparedStatement.execute();
         preparedStatement.close();
+    }
+
+    public static void removeCars() throws SQLException{
+        Scanner scanner = new Scanner(System.in);
+        boolean notFoundID = true;
+        Statement statement = JdbcConfig.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT id from auta");
+        PreparedStatement preparedStatement;
+        int id;
+        showCars();
+        System.out.println("\nType ID car witch you want to remove");
+        while(true){
+            try{
+                id = scanner.nextInt();
+                while (resultSet.next()){
+                    if(id == resultSet.getInt("id")){
+                        preparedStatement = JdbcConfig.getConnection().prepareStatement("DELETE from auta where id = " + id);
+                        preparedStatement.execute();
+                        System.out.println("Car with ID: " + id + " was removed");
+                        notFoundID = false;
+                        break;
+                    }
+
+                }
+                if(notFoundID){
+                    System.out.println("ID does not exist");
+                }
+                    break;
+            } catch (InputMismatchException e){
+                System.out.println("\nIncorrect value - must be number");
+                scanner.next();
+            }
+        }
     }
 }

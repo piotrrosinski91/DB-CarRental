@@ -2,14 +2,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class JdbcConfigTest {
 
     @Test
-    public void shouldReturnConfig(){
-        Connection connection = JdbcConfig.getConnection();
+    public void shouldReturnConfig() {
 
-        Assert.assertNull(connection);
+        Assert.assertNotNull(JdbcConfig.getConnection());
     }
+
 }
 

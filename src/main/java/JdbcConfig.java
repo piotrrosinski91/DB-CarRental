@@ -21,6 +21,7 @@ public class JdbcConfig {
                 CONFIG = DriverManager.getConnection(DB_URL,user,password);
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
+
             }
         }
         return CONFIG;
