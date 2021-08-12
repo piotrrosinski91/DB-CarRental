@@ -11,8 +11,8 @@ public class CarsTest {
         Assert.assertNotNull(Cars.showCars());
     }
     @Test
-    public void shouldAddCar(){
-        //mock??
+    public void shouldAddCar() throws  SQLException{
+
     }
 
     @Test

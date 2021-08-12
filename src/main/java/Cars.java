@@ -31,22 +31,22 @@ public class Cars {
     public static List<Cars> showCars() throws SQLException {
         List<Cars> carsList = new ArrayList<>();
         Statement statement = JdbcConfig.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * from auta");
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String mark = resultSet.getString("marka");
-                String model = resultSet.getString("model");
-                int yearOfProduction = resultSet.getInt("rocznik");
-                int capacity = resultSet.getInt("pojemnosc");
-                String fuelType = resultSet.getString("rodzaj_paliwa");
-                int doors = resultSet.getInt("ilosc_drzwi");
-                String regNumber = resultSet.getString("nr_rej");
-                BigDecimal price = resultSet.getBigDecimal("cena");
+        ResultSet resultSet = statement.executeQuery("SELECT * from cars");
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String mark = resultSet.getString("mark");
+            String model = resultSet.getString("model");
+            int yearOfProduction = resultSet.getInt("yearOfProduction");
+            int capacity = resultSet.getInt("capacity");
+            String fuelType = resultSet.getString("fuelType");
+            int doors = resultSet.getInt("doors");
+            String regNumber = resultSet.getString("regNumber");
+            BigDecimal price = resultSet.getBigDecimal("price");
 
-                Cars cars = new Cars(id, mark, model, yearOfProduction, capacity, fuelType, doors, regNumber, price);
-                carsList.add(cars);
-            }
-        for (Cars cars: carsList) {
+            Cars cars = new Cars(id, mark, model, yearOfProduction, capacity, fuelType, doors, regNumber, price);
+            carsList.add(cars);
+        }
+        for (Cars cars : carsList) {
             System.out.println(cars);
         }
         statement.close();
@@ -55,14 +55,14 @@ public class Cars {
         return carsList;
     }
 
-    public static void addCars() throws SQLException{
+    public static void addCars() throws SQLException {
 
         boolean incorrectYear = true, incorrectCap = true, incorrectDoors = true;
 
         Scanner scanner = new Scanner(System.in);
 
         PreparedStatement preparedStatement = JdbcConfig.getConnection().prepareStatement(
-                "INSERT into auta(marka, model, rocznik, pojemnosc, rodzaj_paliwa, ilosc_drzwi, nr_rej, cena) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                "INSERT into cars(mark, model, yearOfProduction, capacity, fuelType, doors, regNumber, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
         System.out.println("Adding new Car...");
         System.out.println("Type mark");
@@ -74,7 +74,7 @@ public class Cars {
         System.out.println("Type regNumber");
         preparedStatement.setString(7, scanner.nextLine());
 
-        while(true) {
+        while (true) {
             try {
                 if (incorrectYear) {
                     System.out.println("Type yearOfProduction");
@@ -107,21 +107,21 @@ public class Cars {
         preparedStatement.close();
     }
 
-    public static void removeCars() throws SQLException{
+    public static void removeCars() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         boolean notFoundID = true;
         Statement statement = JdbcConfig.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT id from auta");
+        ResultSet resultSet = statement.executeQuery("SELECT id from cars");
         PreparedStatement preparedStatement;
         int id;
         showCars();
         System.out.println("\nType ID car witch you want to remove");
-        while(true){
-            try{
+        while (true) {
+            try {
                 id = scanner.nextInt();
-                while (resultSet.next()){
-                    if(id == resultSet.getInt("id")){
-                        preparedStatement = JdbcConfig.getConnection().prepareStatement("DELETE from auta where id = " + id);
+                while (resultSet.next()) {
+                    if (id == resultSet.getInt("id")) {
+                        preparedStatement = JdbcConfig.getConnection().prepareStatement("DELETE from cars where id = " + id);
                         preparedStatement.execute();
                         System.out.println("Car with ID: " + id + " was removed");
                         notFoundID = false;
@@ -129,11 +129,56 @@ public class Cars {
                     }
 
                 }
-                if(notFoundID){
+                if (notFoundID) {
                     System.out.println("ID does not exist");
                 }
-                    break;
-            } catch (InputMismatchException e){
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("\nIncorrect value - must be number");
+                scanner.next();
+            }
+        }
+        statement.close();
+        resultSet.close();
+    }
+
+    public static void modifyCars() throws SQLException {
+        Statement statement = JdbcConfig.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT id from cars");
+        PreparedStatement preparedStatement;
+        Scanner scanner = new Scanner(System.in);
+        int id;
+        String nameOfColumn, value;
+        boolean notFoundID = true;
+        showCars();
+        System.out.println("\nType ID car witch you want to modify");
+        while (true) {
+            try {
+                id = scanner.nextInt();
+                scanner.nextLine();
+                while (resultSet.next()) {
+                    if (id == resultSet.getInt("id")) {
+                        System.out.println("Type new value");
+                        value = scanner.nextLine();
+                        System.out.println("Type name of column to place the value");
+                        nameOfColumn = scanner.nextLine();
+                        try {
+                            preparedStatement = JdbcConfig.getConnection().prepareStatement("UPDATE cars SET " + nameOfColumn + " = " + value + " WHERE cars.id = " + id);
+                            preparedStatement.execute();
+                            System.out.println("Done! Car " + id + " updated. New value for " + nameOfColumn + " is " + value);
+                        } catch (SQLException e){
+                            System.out.println("Column: " + nameOfColumn + " does not exist");
+                        }
+                        notFoundID = false;
+                        break;
+                    }
+
+                }
+                if (notFoundID) {
+                    System.out.println("ID does not exist");
+                }
+                break;
+            } catch (InputMismatchException e) {
                 System.out.println("\nIncorrect value - must be number");
                 scanner.next();
             }
