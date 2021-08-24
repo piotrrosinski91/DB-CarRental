@@ -8,9 +8,7 @@ public class Main {
         Cars.showCars();
 //        Cars.addCars();
 //        Cars.removeCars();
-        Cars.modifyCars();
-
-        //zmiana na ang cala BD
+//        Cars.modifyCars();
 
     }
 

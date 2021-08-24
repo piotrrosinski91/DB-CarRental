@@ -55,7 +55,7 @@ public class Cars {
         return carsList;
     }
 
-    public static void addCars() throws SQLException {
+    public void addCars() throws SQLException {
 
         boolean incorrectYear = true, incorrectCap = true, incorrectDoors = true;
 
