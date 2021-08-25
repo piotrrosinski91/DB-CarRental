@@ -23,10 +23,9 @@ public class Clients {
     private int phoneNumber;
 
 
-    public void addClients() throws SQLException {
+    public static void addClients() throws SQLException {
 
         Scanner scanner = new Scanner(System.in);
-
         PreparedStatement preparedStatement = JdbcConfig.getConnection().prepareStatement(
                 "INSERT into clients(name, surname, phoneNumber) VALUES (?, ?, ?)");
 
@@ -53,6 +52,7 @@ public class Clients {
     }
 
     public static void removeClients() throws SQLException {
+        Clients.showClients();
         Scanner scanner = new Scanner(System.in);
         boolean notFoundID = true;
         Statement statement = JdbcConfig.getConnection().createStatement();
@@ -86,26 +86,26 @@ public class Clients {
         resultSet.close();
     }
     public static void modifyClients() throws SQLException {
+        Clients.showClients();
         Statement statement = JdbcConfig.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT id from clients");
         PreparedStatement preparedStatement;
         Scanner scanner = new Scanner(System.in);
-        int id;
-        String nameOfColumn, value;
+        Scanner scanner2 = new Scanner(System.in);
+        String nameOfColumn, value, id;
         boolean notFoundID = true;
         System.out.println("\nType ID clients witch you want to modify");
         while (true) {
             try {
-                id = scanner.nextInt();
-                scanner.nextLine();
+                id = scanner.nextLine();
                 while (resultSet.next()) {
-                    if (id == resultSet.getInt("id")) {
+                    if (id.equals(resultSet.getString("id"))) {
                         System.out.println("Type new value");
-                        value = scanner.nextLine();
+                        value = scanner2.nextLine();
                         System.out.println("Type name of column to place the value");
                         nameOfColumn = scanner.nextLine();
                         try {
-                            preparedStatement = JdbcConfig.getConnection().prepareStatement("UPDATE clients SET " + nameOfColumn + " = " + value + " WHERE clients.id = " + id);
+                            preparedStatement = JdbcConfig.getConnection().prepareStatement("UPDATE clients SET " + nameOfColumn + " = '" + value + "' WHERE clients.id = " + id);
                             preparedStatement.execute();
                             System.out.println("Done! Client " + id + " updated. New value for " + nameOfColumn + " is " + value);
                         } catch (SQLException e){
@@ -129,7 +129,7 @@ public class Clients {
     public static List<Clients> showClients() throws SQLException {
         List<Clients> clientsList = new ArrayList<>();
         Statement statement = JdbcConfig.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * from clientfs");
+        ResultSet resultSet = statement.executeQuery("SELECT * from clients");
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
             String name = resultSet.getString("name");

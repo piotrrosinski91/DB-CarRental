@@ -147,23 +147,21 @@ public class Cars {
         ResultSet resultSet = statement.executeQuery("SELECT id from cars");
         PreparedStatement preparedStatement;
         Scanner scanner = new Scanner(System.in);
-        int id;
-        String nameOfColumn, value;
+        String nameOfColumn, value, id;
         boolean notFoundID = true;
         showCars();
         System.out.println("\nType ID car witch you want to modify");
         while (true) {
             try {
-                id = scanner.nextInt();
-                scanner.nextLine();
+                id = scanner.nextLine();
                 while (resultSet.next()) {
-                    if (id == resultSet.getInt("id")) {
+                    if (id.equals(resultSet.getString("id"))) {
                         System.out.println("Type new value");
                         value = scanner.nextLine();
                         System.out.println("Type name of column to place the value");
                         nameOfColumn = scanner.nextLine();
                         try {
-                            preparedStatement = JdbcConfig.getConnection().prepareStatement("UPDATE cars SET " + nameOfColumn + " = " + value + " WHERE cars.id = " + id);
+                            preparedStatement = JdbcConfig.getConnection().prepareStatement("UPDATE cars SET " + nameOfColumn + " = '" + value + "' WHERE cars.id = " + id);
                             preparedStatement.execute();
                             System.out.println("Done! Car " + id + " updated. New value for " + nameOfColumn + " is " + value);
                         } catch (SQLException e){
