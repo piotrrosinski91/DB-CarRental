@@ -27,6 +27,16 @@ public class Cars {
     private String regNumber;
     private BigDecimal price;
 
+    public Cars(String mark, String model, int yearOfProduction, int capacity, String fuelType, int doors, String regNumber, BigDecimal price) {
+        this.mark = mark;
+        this.model = model;
+        this.yearOfProduction = yearOfProduction;
+        this.capacity = capacity;
+        this.fuelType = fuelType;
+        this.doors = doors;
+        this.regNumber = regNumber;
+        this.price = price;
+    }
 
     public static List<Cars> showCars() throws SQLException {
         List<Cars> carsList = new ArrayList<>();
@@ -55,7 +65,7 @@ public class Cars {
         return carsList;
     }
 
-    public void addCars() throws SQLException {
+    public static void addCars() throws SQLException {
 
         boolean incorrectYear = true, incorrectCap = true, incorrectDoors = true;
 
@@ -73,6 +83,7 @@ public class Cars {
         preparedStatement.setString(5, scanner.nextLine());
         System.out.println("Type regNumber");
         preparedStatement.setString(7, scanner.nextLine());
+
 
         while (true) {
             try {
@@ -105,6 +116,13 @@ public class Cars {
         }
         preparedStatement.execute();
         preparedStatement.close();
+
+    }
+    public static Cars addCarsForTests() throws SQLException{
+
+        Cars cars = new Cars("Fiat", "Fiorino", 2017, 1400, "benzyna+lpg", 3, "OP8078G", new BigDecimal(75));
+
+        return cars;
     }
 
     public static void removeCars() throws SQLException {
