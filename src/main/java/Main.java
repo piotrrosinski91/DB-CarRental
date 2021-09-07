@@ -47,10 +47,58 @@ public class Main {
                         }
                         break;
                     case 2:
-                        System.out.println("Clients");
+                        while (true) {
+                            System.out.println("Show clients - type: 1");
+                            System.out.println("Add clients - type: 2");
+                            System.out.println("Remove clients - type: 3");
+                            System.out.println("Modify clients - type: 4");
+                            System.out.println("Return - type: 5");
+                            switch (scanner.nextInt()) {
+                                case 1:
+                                    Clients.showClients();
+                                    continue;
+                                case 2:
+                                    Clients.addClients();
+                                    continue;
+                                case 3:
+                                    Clients.removeClients();
+                                    continue;
+                                case 4:
+                                    Clients.modifyClients();
+                                    continue;
+                                case 5:
+                                    break;
+                                default:
+                                    System.out.println("Incorrect value!");
+                                    continue;
+                            }
+                            break;
+                        }
                         break;
                     case 3:
-                        System.out.println("Orders");
+                        while (true) {
+                            System.out.println("Show orders - type: 1");
+                            System.out.println("Add orders - type: 2");
+                            System.out.println("Remove orders - type: 3");
+                            System.out.println("Modify orders - type: 4");
+                            System.out.println("Return - type: 5");
+                            switch (scanner.nextInt()) {
+                                case 1:
+                                    continue;
+                                case 2:
+                                    continue;
+                                case 3:
+                                    continue;
+                                case 4:
+                                    continue;
+                                case 5:
+                                    break;
+                                default:
+                                    System.out.println("Incorrect value!");
+                                    continue;
+                            }
+                            break;
+                        }
                         break;
                     case 4:
                         System.exit(0);
