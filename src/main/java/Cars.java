@@ -1,10 +1,7 @@
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -118,11 +115,19 @@ public class Cars {
         preparedStatement.close();
 
     }
-    public static Cars addCarsForTests() throws SQLException{
+    public static int addCarsForTests() throws SQLException{
 
-        Cars cars = new Cars("Fiat", "Fiorino", 2017, 1400, "benzyna+lpg", 3, "OP8078G", new BigDecimal(75));
+        int id = 0;
 
-        return cars;
+        String query = ("INSERT into carsTest(mark, model, yearOfProduction, capacity, fuelType, doors, regNumber, price) VALUES (1, 2, 3, 4, 5, 6, 7, 8)");
+        Connection con = JdbcConfig.getConnection();
+        PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        ps.execute();
+        ResultSet rs = ps.getGeneratedKeys();
+        while(rs.next()) {
+            id = rs.getInt(1);
+        }
+        return id;
     }
 
     public static void removeCars() throws SQLException {
